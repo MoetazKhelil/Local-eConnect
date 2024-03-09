@@ -1,0 +1,23 @@
+@import '@ctrl/ngx-emoji-mart/picker';
+
+html, body { height: 100%; }
+html{
+  scroll-behavior: smooth;
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+}
+
+.content {
+  flex: 1 0 auto;
+
+}
+
+app-footer {
+  flex-shrink: 0;
+}
+

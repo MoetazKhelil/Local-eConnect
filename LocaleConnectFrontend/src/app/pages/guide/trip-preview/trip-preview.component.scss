@@ -1,0 +1,11 @@
+
+.trip-card {
+  cursor: pointer;
+  background-color: #e0d0f1;
+  margin: 10px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}

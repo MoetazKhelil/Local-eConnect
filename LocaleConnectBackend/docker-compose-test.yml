@@ -1,0 +1,132 @@
+version: '3.8'
+
+services:
+#  postgres-service:
+#    image: postgres:latest
+#    container_name: postgres-service
+#    environment:
+#      POSTGRES_USER: localeconnect
+#      POSTGRES_PASSWORD: lssa2324app
+#      PGDATA: /data/postgres
+#    volumes:
+#      - postgres:/data/postgres
+#      - ./init-scripts:/docker-entrypoint-initdb.d
+#    ports:
+#      - '5432:5432'
+#    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - '5050:80'
+    restart: unless-stopped
+
+  api-gateway:
+    image: localeconnect/api-gateway
+    pull_policy: always
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://discovery-server:8761/eureka
+    ports:
+      - '8080:8080'
+    restart: always
+
+  chat-service:
+    image: localeconnect/chat-service:latest
+    pull_policy: always
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://discovery-server:8761/eureka
+
+  meetup-service:
+    image: localeconnect/meetup-service:latest
+    pull_policy: always
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://discovery-server:8761/eureka
+      - DB_HOST=localeconnect-database.postgres.database.azure.com
+      - DB_USER=localeconnect
+      - DB_PASSWORD=@lssa2324app
+      - RABBITMQ_HOST=rabbitmq
+
+  user-service:
+    image: localeconnect/user-service:latest
+    pull_policy: always
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://discovery-server:8761/eureka
+      - DB_HOST=localeconnect-database.postgres.database.azure.com
+      - DB_USER=localeconnect
+      - DB_PASSWORD=@lssa2324app
+      - RABBITMQ_HOST=rabbitmq
+
+  itinerary-service:
+    image: localeconnect/itinerary-service:latest
+    pull_policy: always
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://discovery-server:8761/eureka
+      - DB_HOST=localeconnect-database.postgres.database.azure.com
+      - DB_USER=localeconnect
+      - DB_PASSWORD=@lssa2324app
+
+  feed-service:
+    image: localeconnect/feed-service:latest
+    pull_policy: always
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://discovery-server:8761/eureka
+      - DB_HOST=localeconnect-database.postgres.database.azure.com
+      - DB_USER=localeconnect
+      - DB_PASSWORD=@lssa2324app
+
+  trip-service:
+    image: localeconnect/trip-service:latest
+    pull_policy: always
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://discovery-server:8761/eureka
+      - DB_HOST=localeconnect-database.postgres.database.azure.com
+      - DB_USER=localeconnect
+      - DB_PASSWORD=@lssa2324app
+      - RABBITMQ_HOST=rabbitmq
+
+
+  notification-service:
+    image: localeconnect/notification-service:latest
+    pull_policy: always
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://discovery-server:8761/eureka
+      - DB_HOST=localeconnect-database.postgres.database.azure.com
+      - DB_USER=localeconnect
+      - DB_PASSWORD=@lssa2324app
+    ports:
+      - '7002:7002'
+
+  gcp-service:
+    image: localeconnect/gcp-service:latest
+    pull_policy: always
+    volumes:
+      - ./gcloud.json:/configurations
+    environment:
+      - EUREKA_SERVER_ADDRESS=http://discovery-server:8761/eureka
+      - GCP_CONFIG=./configurations
+
+  discovery-server:
+    image: localeconnect/discovery-server:latest
+    pull_policy: always
+    ports:
+      - '8761:8761'
+
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+#    networks:
+#      - localeconnect-network
+
+volumes:
+  postgres:
+  pgadmin:

@@ -1,0 +1,7 @@
+{
+  "client_id": ****************,
+  "client_secret": ********************,
+  "refresh_token": ********************,
+  "type": "authorized_user",
+  "universe_domain": "googleapis.com"
+}

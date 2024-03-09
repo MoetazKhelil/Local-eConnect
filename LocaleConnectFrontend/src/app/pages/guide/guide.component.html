@@ -1,0 +1,103 @@
+<div class="filters-and-search-container">
+  <div class="search-container">
+    <input
+      matInput
+      [formControl]="searchControl"
+      placeholder="Search guides by name"
+      class="search-bar"
+    />
+    <button mat-icon-button class="search-button" (click)="performSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+</div>
+
+<ng-container class="main-container" *ngFor="let guide of displayedGuides">
+  <mat-card class="guide-card">
+    <div class="card-content">
+      <div class="image-container">
+        <img
+          *ngIf="guide.profilePicture; else fallbackImage"
+          [src]="guide.profilePicture"
+          alt="Guide image"
+        />
+        <ng-template #fallbackImage>
+          <img src="assets/pictures/profil.png" alt="Default profile image" />
+        </ng-template>
+      </div>
+      <div class="details-container">
+        <mat-card-header>
+          <mat-card-title>{{ guide.name }}</mat-card-title>
+          <mat-card-subtitle>@{{ guide.userName }}</mat-card-subtitle>
+          <div class="reviews-container">
+            <div class="rating-details">
+              <div *ngIf="guide.averageRating">
+                <app-review
+                  [readOnly]="true"
+                  [rating]="guide.averageRating"
+                ></app-review>
+                <span class="average-rating"
+                  >{{ guide.ratingsCount }} ratings</span
+                >
+              </div>
+              <div *ngIf="!guide.averageRating">
+                <app-review [readOnly]="true" [rating]="0"></app-review>
+                <span class="average-rating"> No ratings yet</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-header>
+
+        <mat-card-content *ngIf="guide.expand" class="guide-details">
+          <div *ngIf="guide.bio">
+            <p>{{ guide.bio }}</p>
+          </div>
+          <h4>Location:</h4>
+          <p>{{ guide.city }}</p>
+          <h4>Visited Countries:</h4>
+          <ul>
+            <li *ngFor="let place of guide.visitedCountries">{{ place }}</li>
+          </ul>
+          <h4>Speaks:</h4>
+          <mat-chip-listbox class="listbox">
+            <mat-chip class="lang" *ngFor="let lang of guide.languages">{{
+              lang
+            }}</mat-chip>
+          </mat-chip-listbox>
+          <h4>Organized Trips:</h4>
+          <div class="trips-container" *ngIf="guide.trips">
+            <app-trip-preview
+              *ngFor="let trip of guide.trips"
+              [trip]="trip"
+            ></app-trip-preview>
+          </div>
+          <div *ngIf="!guide.trips">No trips yet.</div>
+          <div class="rating">
+            <div *ngIf="!guide.ratingSubmitted"><b>Rate this Guide! </b></div>
+            <app-review
+              *ngIf="!guide.ratingSubmitted"
+              [(rating)]="guide.rating"
+              (ratingChange)="submitRating(guide, $event)"
+            ></app-review>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button (click)="toggleDetails(guide)">
+            {{ guide.expand ? "Hide Details" : "View Details" }}
+          </button>
+          <button mat-button (click)="toggleFollow(guide)">
+            {{ guide.isFollowing ? "Unfollow" : "Follow" }}
+          </button>
+        </mat-card-actions>
+      </div>
+    </div>
+  </mat-card>
+</ng-container>
+<mat-paginator
+  [length]="totalLength"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  (page)="updateDisplayedGuides()"
+  aria-label="Select page of meetups"
+>
+</mat-paginator>

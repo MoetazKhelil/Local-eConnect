@@ -1,0 +1,62 @@
+<mat-card class="login-card">
+  <mat-card-header>
+    <mat-card-title>Login</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          formControlName="email"
+          required
+          placeholder="Enter your email"
+        />
+        <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+          userName is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
+          Not a valid email
+        </mat-error>
+        <mat-error
+          *ngIf="loginForm.controls['email'].hasError('userDoesntExist')"
+        >
+          User with this email doesn't exist
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <input
+          matInput
+          formControlName="password"
+          type="password"
+          placeholder="Enter your password"
+        />
+        <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+          Password is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
+          Password must be at least 6 characters long
+        </mat-error>
+        <mat-error
+          *ngIf="loginForm.controls['password'].hasError('wrongPassword')"
+        >
+          Password is wrong
+        </mat-error>
+        <mat-label>Password</mat-label>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!loginForm.valid"
+      >
+        Login
+      </button>
+    </form>
+  </mat-card-content>
+  <mat-card-actions class="login-actions">
+    <a mat-button (click)="openRegisterDialog()"
+      >Don't have an account? Register</a
+    >
+  </mat-card-actions>
+</mat-card>

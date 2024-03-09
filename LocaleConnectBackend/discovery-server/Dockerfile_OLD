@@ -1,0 +1,7 @@
+FROM openjdk:17-jdk-slim
+
+WORKDIR /discovery-server
+
+COPY ./target/discovery-server-1.0-SNAPSHOT.jar /discovery-server/discovery-server-service.jar
+
+ENTRYPOINT ["java", "-jar", "/discovery-server/discovery-server-service.jar"]

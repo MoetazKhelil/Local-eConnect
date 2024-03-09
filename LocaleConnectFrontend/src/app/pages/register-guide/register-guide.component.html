@@ -1,0 +1,210 @@
+<mat-card class="register-card">
+  <mat-card-header>
+    <mat-card-title>Register as guide</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div *ngIf="currentPage === 1">
+        <mat-form-field appearance="fill">
+          <mat-label>First Name</mat-label>
+          <input
+            matInput
+            formControlName="firstName"
+            placeholder="Enter your first name"
+          />
+          <mat-error
+            *ngIf="registerForm.controls['firstName'].hasError('required')"
+          >
+            First Name is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Last Name</mat-label>
+          <input
+            matInput
+            formControlName="lastName"
+            placeholder="Enter your last name"
+          />
+          <mat-error
+            *ngIf="registerForm.controls['lastName'].hasError('required')"
+          >
+            Last Name is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>userName</mat-label>
+          <input
+            matInput
+            formControlName="userName"
+            placeholder="Enter your userName"
+          />
+          <mat-error
+            *ngIf="registerForm.controls['userName'].hasError('required')"
+          >
+            userName is required
+          </mat-error>
+          <mat-error
+            *ngIf="registerForm.controls['userName'].hasError('minlength')"
+          >
+            userName must be at least 3 characters long
+          </mat-error>
+          <mat-error
+            *ngIf="registerForm.controls['userName'].hasError('userExists')"
+          >
+            This userName is already taken.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            type="email"
+            placeholder="Enter your email"
+          />
+          <mat-error
+            *ngIf="registerForm.controls['email'].hasError('required')"
+          >
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="registerForm.controls['email'].hasError('email')">
+            This is not a valid email format
+          </mat-error>
+          <mat-error
+            *ngIf="registerForm.controls['email'].hasError('emailExists')"
+          >
+            This email is already taken.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            type="password"
+            placeholder="Enter your password"
+          />
+          <mat-error
+            *ngIf="registerForm.controls['password'].hasError('required')"
+          >
+            Password is required
+          </mat-error>
+          <mat-error
+            *ngIf="registerForm.controls['password'].hasError('minlength')"
+          >
+            Password must be at least 6 characters long
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Date of Birth</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dateOfBirth"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error
+            *ngIf="registerForm.controls['dateOfBirth'].hasError('required')"
+          >
+            Date of birth is required
+          </mat-error>
+          <mat-error
+            *ngIf="registerForm.controls['dateOfBirth'].hasError('tooYoung')"
+          >
+            You must be at least 18 years old
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div *ngIf="currentPage === 2">
+        <mat-form-field appearance="fill">
+          <mat-label>Languages</mat-label>
+          <mat-select formControlName="languages" [multiple]="true">
+            <mat-option *ngFor="let language of LANGUAGES" [value]="language">
+              {{ language }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="registerForm.controls['languages']?.hasError('required')"
+          >
+            Languages are required
+          </mat-error>
+          <mat-error
+            *ngIf="registerForm.controls['languages']?.hasError('minLanguages')"
+          >
+            You must select at least two languages
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Bio</mat-label>
+          <textarea matInput formControlName="bio"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city" />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Visited Countries</mat-label>
+          <mat-select formControlName="visitedCountries" [multiple]="true">
+            <mat-option *ngFor="let country of COUNTRIES" [value]="country">
+              {{ country }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="currentPage === 3" class="upload-and-terms">
+        <div class="file-upload-section">
+          <input
+            type="file"
+            id="file"
+            #fileInput
+            (change)="addProfilePicture($event)"
+            hidden
+          />
+          <img
+            *ngIf="profilePictureSrc"
+            [src]="profilePictureSrc"
+            class="profile-preview"
+            alt="Profile Preview"
+          />
+
+          <label for="file" class="file-upload-label">
+            <mat-icon>add_photo_alternate</mat-icon>
+            <span>Choose Image</span>
+          </label>
+        </div>
+        <mat-checkbox>I accept the terms and conditions.</mat-checkbox>
+      </div>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="registerForm.invalid"
+        type="submit"
+      >
+        Register
+      </button>
+    </form>
+  </mat-card-content>
+
+  <div class="form-navigation">
+    <button mat-button (click)="previousPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+    <button
+      mat-button
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages"
+    >
+      Next
+    </button>
+  </div>
+  <mat-card-actions class="register-actions">
+    <a mat-button (click)="switchToLogin()">Already have an account? Login</a>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,70 @@
+.itinerary-card {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  mat-card-title {
+    font-size: 1.5rem;
+    color: #594E78;
+    padding-bottom: 20px;
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+
+  }
+
+  .itinerary-form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .itinerary-form-field {
+    width: 100%;
+    mat-label {
+      font-size: 1rem;
+    }
+  }
+
+  .file-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .file-input-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: lightgrey;
+    background-color: #8085AD;
+    border-radius: 4px;
+    cursor: pointer;
+
+    mat-icon {
+      color: lightgrey;
+      margin-right: 8px;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  button {
+    color: #594E78;
+    min-width: 100px;
+  }
+}
+
+
+mat-error {
+  color: red;
+  font-size: 0.85rem;
+}
+

@@ -1,0 +1,73 @@
+version: '3.1'
+
+services:
+
+  notification-postgresqlDB:
+    image: postgres
+    container_name: notification-postgres-DB
+    environment:
+      POSTGRES_USER: localeconnect
+      POSTGRES_PASSWORD: lssa2324app
+      POSTGRES_DB: notification-DB
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - localeconnect-network
+    restart: unless-stopped
+
+  notification-pgadmin:
+    container_name: notification-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - localeconnect-network
+    restart: unless-stopped
+
+
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - localeconnect-network
+
+  notification-service:
+    container_name: notification-service
+    build:
+      context: ../
+      dockerfile: Dockerfile_OLD
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://notification-postgresqlDB:5432/notification-DB
+      - SPRING_DATASOURCE_USERNAME=localeconnect
+      - SPRING_DATASOURCE_PASSWORD=lssa2324app
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://localhost:8761/eureka
+    ports:
+      - "7002:7002"
+    depends_on:
+      - notification-postgresqlDB
+      - rabbitmq
+    networks:
+      - localeconnect-network
+
+
+
+networks:
+  localeconnect-network:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

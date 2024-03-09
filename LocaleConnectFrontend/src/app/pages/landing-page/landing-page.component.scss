@@ -1,0 +1,71 @@
+
+:host {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #E7EEFF;
+}
+
+.background-image {
+  background: url('/assets/pictures/background-landing-page.png') no-repeat center center;
+  background-size: cover;
+  text-align: center;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0);
+  padding: 200px 0;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+a {
+  margin-top: 20px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.why-localeconnect {
+  padding: 50px;
+  text-align: center;
+.introduction{
+  color: #555;
+}
+  h2 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: #98769E;
+  }
+
+  mat-grid-list {
+    width: 100%;
+    margin: 0 auto;
+    .tile-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+
+  }
+
+  h3 {
+    font-size: 1.5em;
+    color: #98769E;
+
+  }
+
+  p {
+    font-size: 1em;
+    color: #555;
+  }
+}

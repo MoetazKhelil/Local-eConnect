@@ -1,0 +1,102 @@
+<div class="filters-and-search-container">
+  <div class="search-container">
+    <input
+      matInput
+      [formControl]="searchControl"
+      placeholder="Search meetups by name"
+      class="search-bar"
+    />
+    <button mat-icon-button class="search-button" (click)="performSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+</div>
+
+<ng-container class="main-container" *ngFor="let meetup of displayedMeetups">
+  <mat-card class="meetup-card">
+    <div class="card-content">
+      <div class="details-container">
+        <mat-card-header>
+          <mat-card-title>{{ meetup.name }}</mat-card-title>
+          <mat-card-subtitle
+            >Organized by: {{ meetup.creatorName }}</mat-card-subtitle
+          >
+          <div class="reviews-container">
+            <div class="rating-details">
+              <div *ngIf="meetup.averageRating">
+                <app-review
+                  [readOnly]="true"
+                  [rating]="meetup.averageRating"
+                ></app-review>
+                <span class="average-rating"
+                  >{{ meetup.ratingsCount }} ratings</span
+                >
+              </div>
+              <div *ngIf="!meetup.averageRating">
+                <app-review [readOnly]="true" [rating]="0"></app-review>
+                <span class="average-rating"> No ratings yet</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-header>
+
+        <mat-card-content *ngIf="meetup.expand" class="meetup-details">
+          <p>{{ meetup.description }}</p>
+          <h4>Location:</h4>
+          <p>{{ meetup.location }}</p>
+          <div *ngIf="meetup.cost">
+            <h4>Cost:</h4>
+            <p>{{ meetup.cost | currency : "EUR" : true }}</p>
+          </div>
+          <h4>Date:</h4>
+          <p>{{ meetup.date | date }}</p>
+          <p><b>Start Time:</b> {{ meetup.startTime }}</p>
+          <p><b>End Time:</b> {{ meetup.endTime }}</p>
+          <div *ngIf="meetup.spokenLanguages.length">
+            <h4>Spoken Languages:</h4>
+            <mat-chip-listbox>
+              <mat-chip
+                class="lang"
+                *ngFor="let lang of meetup.spokenLanguages"
+                >{{ lang }}</mat-chip
+              >
+            </mat-chip-listbox>
+          </div>
+          <div class="rating">
+            <div *ngIf="!meetup.ratingSubmitted"><b>Rate this Meetup! </b></div>
+            <app-review
+              *ngIf="!meetup.ratingSubmitted"
+              [(rating)]="meetup.rating"
+              (ratingChange)="submitRating(meetup, $event)"
+            ></app-review>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button (click)="toggleDetails(meetup)">
+            {{ meetup.expand ? "Hide Details" : "View Details" }}
+          </button>
+          <button mat-button (click)="changeMeetupAttendance(meetup.id)">
+            {{ meetup.isAttending ? "UnAttend" : "Attend" }}
+          </button>
+          <button
+            mat-button
+            (click)="checkUserMeetupsBeforeDeletion(meetup.id)"
+          >
+            Delete
+          </button>
+        </mat-card-actions>
+      </div>
+    </div>
+  </mat-card>
+</ng-container>
+<div class="button-container">
+  <button mat-raised-button (click)="openAddMeetupDialog()">Add Meetup</button>
+</div>
+<mat-paginator
+  [length]="totalLength"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[2, 5, 10, 25, 100]"
+  (page)="updateDisplayedMeetups()"
+  aria-label="Select page of meetups"
+>
+</mat-paginator>

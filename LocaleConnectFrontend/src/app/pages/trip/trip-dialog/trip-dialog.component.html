@@ -1,0 +1,126 @@
+<mat-card class="trip-card">
+  <mat-card-header>
+    <mat-card-title>Add New Trip</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="tripForm" (ngSubmit)="onSubmit()" class="trip-form">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" />
+        <mat-error *ngIf="tripForm.controls['name'].hasError('required')"
+          >Name is required.</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Departure Day</mat-label>
+        <input
+          matInput
+          [matDatepicker]="departureDatePicker"
+          formControlName="departureTime"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="departureDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #departureDatePicker></mat-datepicker>
+        <mat-error
+          *ngIf="tripForm.controls['departureTime'].hasError('required')"
+          >Departure Day is required.</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Destination</mat-label>
+        <input matInput formControlName="destination" />
+        <mat-error *ngIf="tripForm.controls['destination'].hasError('required')"
+          >Destination is required.</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Duration (Hours)</mat-label>
+        <input matInput type="number" formControlName="durationInDays" />
+        <mat-error
+          *ngIf="tripForm.controls['durationInDays'].hasError('required')"
+          >Duration is required.</mat-error
+        >
+        <mat-error *ngIf="tripForm.controls['durationInDays'].hasError('min')"
+          >Duration must be at least 1 day.</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Capacity</mat-label>
+        <input matInput type="number" formControlName="capacity" />
+        <mat-error *ngIf="tripForm.controls['capacity'].hasError('required')"
+          >Capacity is required.</mat-error
+        >
+        <mat-error *ngIf="tripForm.controls['capacity'].hasError('min')"
+          >Capacity must be at least 1.</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Spoken Languages</mat-label>
+        <mat-select formControlName="languages" [multiple]="true">
+          <mat-option *ngFor="let language of LANGUAGES" [value]="language">
+            {{ language }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="tripForm.controls['languages'].hasError('required')"
+          >At least one language is required.</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="itinerary-form-field">
+        <mat-label>Places to Visit</mat-label>
+        <input
+          matInput
+          formControlName="placesToVisit"
+          placeholder="Place1, Place2, Place3"
+        />
+        <mat-error
+          *ngIf="tripForm.controls['placesToVisit'].hasError('required')"
+        >
+          At least one destination is required.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="itinerary-form-field">
+        <mat-label>Daily Activities</mat-label>
+        <input
+          matInput
+          formControlName="dailyActivities"
+          placeholder="Activity1, Activity2, Activity3"
+        />
+      </mat-form-field>
+      <div class="file-input-container">
+        <input
+          #fileInput
+          type="file"
+          id="file"
+          (change)="onFileSelected($event)"
+          hidden
+        />
+        <label for="file" class="file-input-label">
+          <mat-icon>add_photo_alternate</mat-icon>
+          Choose Image
+        </label>
+      </div>
+      <div class="actions">
+        <button mat-button (click)="onNoClick()">Cancel</button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="tripForm.invalid"
+        >
+          Create Trip
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

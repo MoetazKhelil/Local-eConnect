@@ -1,0 +1,30 @@
+<mat-card class="post-card">
+  <mat-card-header>
+    <mat-card-title>Add Post</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="post-form-field">
+        <mat-label>Post Content</mat-label>
+        <textarea  matInput formControlName="content" required></textarea>
+        <button type="button" (click)="toggleEmojiPicker()">😊</button>
+      </mat-form-field>
+      <div class="emoji" *ngIf="showEmojiPicker">
+        <emoji-mart (emojiClick)="addEmoji($event)"></emoji-mart>
+      </div>
+
+      <div class="file-input-container">
+        <input #fileInput type="file" id="file" (change)="onFileSelected($event)" multiple hidden>
+        <label for="file" class="file-input-label">
+          <mat-icon>add_photo_alternate</mat-icon>
+          Choose Images
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button mat-button (click)="onNoClick()">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="postForm.invalid">Submit</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

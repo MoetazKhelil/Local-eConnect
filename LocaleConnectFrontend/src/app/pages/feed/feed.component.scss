@@ -1,0 +1,238 @@
+.locale-connect {
+  display: grid;
+  grid-template-columns: 250px auto 250px;
+  grid-gap: 16px;
+  max-width: max-content;
+  margin: 0 auto;
+  padding: 16px;
+
+  .profile-sidebar,
+  .followers-sidebar {
+    background-color: #e0d0f1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-header {
+
+    .profile-image {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+
+    .profile-image-upload {
+      border-radius: 50%;
+      width: 110px;
+      height: 110px;
+      border: #594E78;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .profile-name {
+      margin: 8px 0;
+      font-size: 24px;
+    }
+
+    .profile-handle {
+      color: #666;
+    }
+  }
+
+  .profile-nav {
+    padding-top: 40px;
+
+    .make-post {
+      cursor: pointer;
+      background-color: #8085AD;
+      color: white;
+      font-size: 12px;
+      border-radius: 20px;
+      padding: 10px 20px;
+      min-width: 100px;
+      border: none;
+
+    }
+  }
+
+  .feed-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-width: 1000px;
+
+    .post-card {
+      margin-bottom: 20px;
+
+      .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        .author-details {
+          display: flex;
+          align-items: center;
+
+          .profile-image {
+            background-color: #594E78;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            .details-section{
+              display: flex;
+              flex-direction: column;
+            }
+          }
+        }
+
+        .follow-btn {
+          margin-left: auto;
+          color: #594E78;
+        }
+      }
+
+
+      mat-card-title,
+      mat-card-subtitle {
+        margin-left: 12px;
+      }
+
+      mat-icon.liked {
+        color: #8085AD;
+      }
+
+      .post-content {
+        padding: 20px;
+        position: relative;
+
+
+        img {
+          width: 30%;
+          height: auto;
+          border: 1px solid #ccc;
+          border-radius: 20px;
+          margin-bottom: 20px;
+          margin-right: 10px;
+
+
+        }
+
+        button {
+          position: absolute;
+          right: 20px;
+          bottom: 0;
+          background-color: #594E78;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          font-size: 14px;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+
+
+        p {
+          font-size: 18px;
+        }
+      }
+
+
+      .comment {
+        border-top: 1px solid #eeeeee;
+        padding: 16px;
+
+
+        .comment-author {
+          font-weight: bold;
+        }
+
+        .comment-date {
+          margin-left: 10px;
+          font-size: 0.85em;
+          color: #757575;
+        }
+
+        .comment-text {
+          margin-top: 5px;
+        }
+      }
+
+      .add-comment-section {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+
+        .comment-input {
+          width: 100%;
+
+          mat-form-field {
+            width: 100%;
+
+            input {
+              padding: 4px 8px;
+              font-size: 0.9em;
+            }
+          }
+        }
+
+        button {
+          margin-left: 8px;
+        }
+      }
+
+    }
+  }
+
+  .followers-sidebar {
+    .sidebar-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .follower-item {
+      display: flex;
+      flex-direction: row;
+
+      .profile-avatar {
+        margin-right: 20px;
+
+        img {
+          color: #594E78;
+          width: 30px;
+          height: 30px;
+          border: 1px solid #ccc;
+          border-radius: 20px;
+        }
+      }
+
+      .follower-details {
+        display: flex;
+        flex-direction: column;
+
+        .follower-name,
+        .follower-handle {
+          margin: 0;
+        }
+
+        .follower-name {
+          font-weight: bold;
+        }
+
+        .follower-handle {
+          font-size: 0.85em;
+          color: #757575;
+        }
+      }
+    }
+  }
+
+
+}

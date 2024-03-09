@@ -1,0 +1,21 @@
+
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  column-gap: 16px;
+  align-items: center;
+
+}
+
+mat-toolbar{
+  background-color:#8085AD;
+
+}
+.spacer{
+  flex: 1 1 auto;
+}
+.title{
+    margin-left: 8px;
+}
+

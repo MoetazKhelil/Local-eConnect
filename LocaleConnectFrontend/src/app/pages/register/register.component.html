@@ -1,0 +1,132 @@
+<mat-card class="register-card">
+  <mat-card-header>
+    <mat-card-title>Register</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          formControlName="firstName"
+          placeholder="Enter your first name"
+        />
+        <mat-error
+          *ngIf="registerForm.controls['firstName'].hasError('required')"
+        >
+          First Name is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          formControlName="lastName"
+          placeholder="Enter your last name"
+        />
+        <mat-error
+          *ngIf="registerForm.controls['lastName'].hasError('required')"
+        >
+          Last Name is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>userName</mat-label>
+        <input
+          matInput
+          formControlName="userName"
+          placeholder="Enter your userName"
+        />
+        <mat-error
+          *ngIf="registerForm.controls['userName'].hasError('required')"
+        >
+          userName is required
+        </mat-error>
+        <mat-error
+          *ngIf="registerForm.controls['userName'].hasError('minlength')"
+        >
+          userName must be at least 3 characters long
+        </mat-error>
+        <mat-error
+          *ngIf="registerForm.controls['userName'].hasError('userExists')"
+        >
+          This userName is already taken.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          formControlName="email"
+          type="email"
+          placeholder="Enter your email"
+        />
+        <mat-error *ngIf="registerForm.controls['email'].hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="registerForm.controls['email'].hasError('email')">
+          This is not a valid email format
+        </mat-error>
+        <mat-error
+          *ngIf="registerForm.controls['email'].hasError('emailExists')"
+        >
+          This email is already taken.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Date of Birth</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dateOfBirth"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error
+          *ngIf="registerForm.get('dateOfBirth')?.hasError('required')"
+        >
+          Date of birth is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          type="password"
+          placeholder="Enter your password"
+        />
+        <mat-error
+          *ngIf="registerForm.controls['password'].hasError('required')"
+        >
+          Password is required
+        </mat-error>
+        <mat-error
+          *ngIf="registerForm.controls['password'].hasError('minlength')"
+        >
+          Password must be at least 6 characters long
+        </mat-error>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!registerForm.valid"
+      >
+        Register
+      </button>
+      <p class="or-separator">OR</p>
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        (click)="openGuideDialog()"
+      >
+        Register as a Guide
+      </button>
+    </form>
+  </mat-card-content>
+  <mat-card-actions class="register-actions">
+    <a mat-button (click)="switchToLogin()">Already have an account? Login</a>
+  </mat-card-actions>
+</mat-card>

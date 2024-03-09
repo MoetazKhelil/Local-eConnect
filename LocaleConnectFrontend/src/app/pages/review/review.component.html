@@ -1,0 +1,12 @@
+<div class="star-rating">
+  <ng-container *ngFor="let star of getStars(rating).fullStars; let i = index">
+    <mat-icon (click)="!readOnly && onSelect(i + 1)">{{ star }}</mat-icon>
+  </ng-container>
+  <ng-container *ngIf="getStars(rating).halfStar.length">
+    <mat-icon (click)="!readOnly && onSelect(getStars(rating).fullStars.length + 0.5)">star_half</mat-icon>
+  </ng-container>
+  <ng-container *ngFor="let star of getStars(rating).emptyStars; let i = index">
+    <mat-icon (click)="!readOnly && onSelect(getStars(rating).fullStars.length + (getStars(rating).halfStar.length ? 1 : 0) + i + 1)">{{ star }}</mat-icon>
+  </ng-container>
+
+</div>

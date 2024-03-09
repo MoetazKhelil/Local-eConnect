@@ -1,0 +1,153 @@
+<div class="filters-and-search-container">
+  <div class="search-container">
+    <input
+      matInput
+      [formControl]="searchControl"
+      placeholder="Search itineraries by title"
+      class="search-bar"
+    />
+    <button mat-icon-button class="search-button" (click)="performSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+  <div class="filter-container" [formGroup]="filterForm">
+    <input matInput formControlName="place" placeholder="Place" />
+    <input matInput formControlName="days" placeholder="Maximum Days" />
+    <div class="selector">
+      <mat-select formControlName="tag" placeholder="Tag">
+        <mat-option *ngFor="let tag of tagOptions" [value]="tag">{{
+          tag
+        }}</mat-option>
+      </mat-select>
+    </div>
+
+    <button mat-button (click)="performFilter()">Apply Filters</button>
+  </div>
+</div>
+
+<ng-container
+  class="main-container"
+  *ngFor="let itinerary of displayedItineraries"
+>
+  <mat-card class="itinerary-card">
+    <div class="card-content">
+      <div class="image-container">
+        <img
+          *ngIf="itinerary.imageUrls.length > 0; else fallbackImage"
+          [src]="itinerary.imageUrls[0]"
+          alt="Itinerary image"
+        />
+        <ng-template #fallbackImage>
+          <img
+            src="assets/pictures/not_available.png"
+            alt="Default itinerary image"
+          />
+        </ng-template>
+      </div>
+
+      <div class="details-container">
+        <mat-card-header>
+          <mat-card-title>{{ itinerary.name }}</mat-card-title>
+          <mat-card-subtitle
+            >Organized by: {{ itinerary.userName }}</mat-card-subtitle
+          >
+          <div class="reviews-container">
+            <div class="rating-details">
+              <div *ngIf="itinerary.averageRating">
+                <app-review
+                  [readOnly]="true"
+                  [rating]="itinerary.averageRating"
+                ></app-review>
+                <span class="average-rating"
+                  >{{ itinerary.ratingsCount }} ratings</span
+                >
+              </div>
+              <div *ngIf="!itinerary.averageRating">
+                <app-review [readOnly]="true" [rating]="0"></app-review>
+                <span class="average-rating"> No ratings yet</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-header>
+
+        <mat-card-content *ngIf="itinerary.expand" class="itinerary-details">
+          <p>{{ itinerary.description }}</p>
+          <div *ngIf="itinerary.tags.length">
+            <mat-chip-listbox>
+              <mat-chip class="tag" *ngFor="let tag of itinerary.mappedTags">{{
+                tag
+              }}</mat-chip>
+            </mat-chip-listbox>
+          </div>
+          <div *ngIf="itinerary.numberOfDays">
+            <h4>Duration:</h4>
+            <p>{{ itinerary.numberOfDays }} Days</p>
+          </div>
+
+          <div *ngIf="itinerary.placesToVisit.length">
+            <h4>Places to Visit:</h4>
+            <ul>
+              <li *ngFor="let place of itinerary.placesToVisit">{{ place }}</li>
+            </ul>
+          </div>
+          <div *ngIf="itinerary.dailyActivities.length">
+            <h4>Activities:</h4>
+            <ul>
+              <li *ngFor="let activity of itinerary.dailyActivities">
+                {{ activity }}
+              </li>
+            </ul>
+          </div>
+          <!-- <mat-card-content>
+            <div class="image-container" *ngIf="itinerary.imageUrls">
+              <ng-container *ngFor="let image of itinerary.imageUrls; let i = index">
+                <ng-container *ngIf="showAllImages || i < 3">
+                  <img mat-card-image [src]="image" alt="Post image">
+                </ng-container>
+              </ng-container>
+              <button *ngIf="itinerary.imageUrls.length > 3" (click)="toggleImagesDisplay()">
+                {{ showAllImages ? '- less' : '+' + (itinerary.imageUrls.length - 3) + ' more' }}
+              </button>
+            </div>
+          </mat-card-content> -->
+          <div class="rating">
+            <div *ngIf="!itinerary.ratingSubmitted">
+              <b>Rate this Itinerary! </b>
+            </div>
+            <app-review
+              *ngIf="!itinerary.ratingSubmitted"
+              [(rating)]="itinerary.rating"
+              (ratingChange)="submitRating(itinerary, $event)"
+            ></app-review>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <div *ngIf="itinerary.id">
+            <button mat-button (click)="toggleDetails(itinerary)">
+              {{ itinerary.expand ? "Hide Details" : "View Details" }}
+            </button>
+            <button
+              mat-button
+              (click)="checkUserItinerariesBeforeDeletion(itinerary.id)"
+            >
+              Delete
+            </button>
+          </div>
+        </mat-card-actions>
+      </div>
+    </div>
+  </mat-card>
+</ng-container>
+<div class="button-container">
+  <button mat-raised-button (click)="openAddItineraryDialog()">
+    Add Itinerary
+  </button>
+</div>
+<mat-paginator
+  [length]="totalLength"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  (page)="updateDisplayedItineraries()"
+  aria-label="Select page of meetups"
+>
+</mat-paginator>

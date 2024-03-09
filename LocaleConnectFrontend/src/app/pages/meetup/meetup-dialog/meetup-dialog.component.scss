@@ -1,0 +1,31 @@
+.meetup-card {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  .meetup-form {
+    display: grid;
+    gap: 20px;
+  }
+
+  .meetup-form-field {
+    width: 100%;
+
+    mat-label {
+      font-size: 1rem;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+
+    button {
+      min-width: 100px;
+    }
+  }
+}

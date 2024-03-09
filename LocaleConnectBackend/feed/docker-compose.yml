@@ -1,0 +1,73 @@
+version: '3.1'
+
+services:
+
+  feed-postgresqlDB:
+    image: postgres
+    container_name: feed-postgres-DB
+    environment:
+      POSTGRES_USER: localeconnect
+      POSTGRES_PASSWORD: lssa2324app
+      POSTGRES_DB: feed-DB
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - localeconnect-network
+    restart: unless-stopped
+
+  feed-pgadmin:
+    container_name: feed-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - localeconnect-network
+    restart: unless-stopped
+
+
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - localeconnect-network
+
+  feed-service:
+    container_name: feed-service
+    build:
+      context: ../
+      dockerfile: feed/Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://feed-postgresqlDB:5432/feed-DB
+      - SPRING_DATASOURCE_USERNAME=localeconnect
+      - SPRING_DATASOURCE_PASSWORD=lssa2324app
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    #      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://localhost:8761/eureka
+    ports:
+      - "8081:8081"
+    depends_on:
+      - feed-postgresqlDB
+      - rabbitmq
+    networks:
+      - localeconnect-network
+
+
+
+networks:
+  localeconnect-network:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

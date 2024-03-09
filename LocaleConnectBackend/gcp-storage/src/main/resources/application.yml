@@ -1,0 +1,20 @@
+server:
+  port: 5005
+
+spring:
+  application:
+    name: gcp-service
+
+gcs-resource-bucket: localeconnect_bucket
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka}
+
+
+gcp:
+  credentials:
+    path: ${GCP_CONFIG:LocaleConnectBackend/gcloud.json}

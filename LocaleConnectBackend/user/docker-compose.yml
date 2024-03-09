@@ -1,0 +1,60 @@
+version: '3.1'
+
+services:
+
+  postgresqlDB:
+    image: postgres
+    container_name: user-postgres-DB
+    environment:
+      POSTGRES_USER: localeconnect
+      POSTGRES_PASSWORD: lssa2324app
+      POSTGRES_DB: user-DB
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - localeconnect-network
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin-user
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - localeconnect-network
+    restart: unless-stopped
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ../
+      dockerfile: user/Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqlDB:5432/user-DB
+      - SPRING_DATASOURCE_USERNAME=localeconnect
+      - SPRING_DATASOURCE_PASSWORD=lssa2324app
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://localhost:8761/eureka
+    ports:
+      - "8084:8084"
+    depends_on:
+      - postgresqlDB
+    networks:
+      - localeconnect-network
+
+networks:
+  localeconnect-network:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

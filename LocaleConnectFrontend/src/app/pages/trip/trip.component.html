@@ -1,0 +1,131 @@
+<div class="filters-and-search-container">
+  <div class="search-container">
+    <input
+      matInput
+      [formControl]="searchControl"
+      placeholder="Search trips by name"
+      class="search-bar"
+    />
+    <button mat-icon-button class="search-button" (click)="performSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+</div>
+<div class="top">
+  <ng-container class="main-container" *ngFor="let trip of displayedTrips">
+    <mat-card class="trip-card">
+      <div class="card-content">
+        <div class="details-container">
+          <mat-card-header>
+            <mat-card-title>{{ trip.name }}</mat-card-title>
+            <mat-card-subtitle
+              >Organized by: {{ trip.localguideuserName }}</mat-card-subtitle
+            >
+            <div class="reviews-container">
+              <div class="rating-details">
+                <div *ngIf="trip.averageRating">
+                  <app-review
+                    [readOnly]="true"
+                    [rating]="trip.averageRating"
+                  ></app-review>
+                  <span class="average-rating"
+                    >{{ trip.ratingsCount }} ratings</span
+                  >
+                </div>
+                <div *ngIf="!trip.averageRating">
+                  <app-review [readOnly]="true" [rating]="0"></app-review>
+                  <span class="average-rating"> No ratings yet</span>
+                </div>
+              </div>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content *ngIf="trip.expand" class="trip-details">
+            <p>{{ trip.description }}</p>
+            <h4>Maximum Attendants:</h4>
+            <p>{{ trip.capacity }}</p>
+            <h4>Destination:</h4>
+            <p>{{ trip.destination }}</p>
+            <p><b>Departure Day:</b> {{ trip.departureTime }}</p>
+            <p><b>Duration:</b> {{ trip.durationInHours }} Days</p>
+            <div *ngIf="trip.placesToVisit.length">
+              <h4>Places to Visit:</h4>
+              <ul>
+                <li *ngFor="let place of trip.placesToVisit">{{ place }}</li>
+              </ul>
+            </div>
+            <div *ngIf="trip.dailyActivities?.length">
+              <h4>Daily Activities:</h4>
+              <ul>
+                <li *ngFor="let place of trip.placesToVisit">{{ place }}</li>
+              </ul>
+            </div>
+            <div *ngIf="trip.languages.length">
+              <h4>Spoken Languages:</h4>
+              <mat-chip-listbox>
+                <mat-chip class="lang" *ngFor="let lang of trip.languages">{{
+                  lang
+                }}</mat-chip>
+              </mat-chip-listbox>
+            </div>
+            <mat-card-content>
+              <div class="image-container" *ngIf="trip.imageUrls">
+                <ng-container
+                  *ngFor="let image of trip.imageUrls; let i = index"
+                >
+                  <ng-container *ngIf="showAllImages || i < 3">
+                    <img mat-card-image [src]="image" alt="Post image" />
+                  </ng-container>
+                </ng-container>
+                <button
+                  *ngIf="trip.imageUrls.length > 3"
+                  (click)="toggleImagesDisplay()"
+                >
+                  {{
+                    showAllImages
+                      ? "- less"
+                      : "+" + (trip.imageUrls.length - 3) + " more"
+                  }}
+                </button>
+              </div>
+            </mat-card-content>
+            <div class="rating">
+              <div *ngIf="!trip.ratingSubmitted"><b>Rate this Trip! </b></div>
+              <app-review
+                *ngIf="!trip.ratingSubmitted"
+                [(rating)]="trip.rating"
+                (ratingChange)="submitRating(trip, $event)"
+              ></app-review>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button (click)="toggleDetails(trip)">
+              {{ trip.expand ? "Hide Details" : "View Details" }}
+            </button>
+            <button mat-button (click)="toggleJoin(trip)">
+              {{ trip.isAttending ? "Leave" : "Join" }}
+            </button>
+            <button mat-button (click)="checkGuideTripsAndDelete(trip.id)">
+              Delete
+            </button>
+          </mat-card-actions>
+        </div>
+      </div>
+    </mat-card>
+  </ng-container>
+  <div class="bottom">
+    <div class="button-container">
+      <button mat-raised-button (click)="openAddMeetupDialog()">
+        Add Trip
+      </button>
+    </div>
+    <mat-paginator
+      [length]="totalLength"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[2, 5, 10, 25, 100]"
+      (page)="updateDisplayedTrips()"
+      aria-label="Select page of trips"
+    >
+    </mat-paginator>
+  </div>
+</div>

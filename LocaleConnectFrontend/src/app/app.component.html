@@ -1,0 +1,8 @@
+<div class="app-container">
+  <app-header *ngIf="shouldShowDefaultHeader"></app-header>
+  <app-detail-header *ngIf="!shouldShowDefaultHeader"></app-detail-header>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
+</div>
